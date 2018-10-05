@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
   Button,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 
 import { 
@@ -17,6 +17,9 @@ import {
 
 import {storageGet, storageClear} from '../storage/localStorage';
 import {getUser} from '../api/user';
+
+import {connect} from 'react-redux';
+import {logout} from '../actions';
 
 const ACCESS_TOKEN = 'access_token';
 
@@ -46,6 +49,8 @@ class Profile extends React.Component {
 
   _signOutAsync = async () => {
     await storageClear();
+    //redux store
+    this.props.dispatch(logout())
     this.props.navigation.navigate('Home');
   };
 
@@ -55,7 +60,6 @@ class Profile extends React.Component {
     if (token) {
       try {
         let res = await getUser(token);
-        console.log(res)
         if (res.status == 'ok') {
             let name = res.data.name;
             this.setState({name: name});
@@ -100,4 +104,4 @@ class Profile extends React.Component {
   }
 }
 
-export default Profile;
+export default connect()(Profile);

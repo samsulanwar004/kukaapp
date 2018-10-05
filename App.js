@@ -1,11 +1,15 @@
 import React from 'react';
 import Navigator from './src/setup/routes';
+import store from './src/store';
+import {Provider} from 'react-redux';
 
 class App extends React.Component {
 
   render() {
     return (
-      <Navigator />
+    	<Provider store={store}>
+      		<Navigator />
+      	</Provider>
     );
   }
 }

@@ -24,7 +24,9 @@ import {
 } from 'native-base';
 
 import {storageSet} from '../storage/localStorage';
-import {login} from '../api/user';
+import {auth} from '../api/user';
+import {login} from '../actions';
+import {connect} from 'react-redux';
 
 const ACCESS_TOKEN = 'access_token';
 
@@ -54,7 +56,7 @@ class Login extends React.Component {
     this.setState({isLoading: true})
 
     try {
-      let res = await login(this.state.email, this.state.password);
+      let res = await auth(this.state.email, this.state.password);
       console.log(res)
       if (res.status == 'ok') {
           //Handle success
@@ -62,6 +64,7 @@ class Login extends React.Component {
         console.log(accessToken);
         //On success we will store the access_token in the AsyncStorage
         this.storeToken(accessToken);
+        this.props.dispatch(login(accessToken))
         this.redirect('Profile');
       } else {
           //Handle error
@@ -120,4 +123,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default connect()(Login);

@@ -26,6 +26,8 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 
 import {storageGet, storageClear} from '../storage/localStorage';
 import {getUser} from '../api/user';
+import {connect} from 'react-redux';
+import {login} from '../actions';
 
 const ACCESS_TOKEN = 'access_token';
 
@@ -35,7 +37,6 @@ class Drawer extends React.Component {
     super(props);
   
     this.state = {
-      token: '',
       name: '',
       error: '',
       isLoading: true
@@ -47,8 +48,9 @@ class Drawer extends React.Component {
 
   _loadAsync = async () => {
     const token = await storageGet(ACCESS_TOKEN);
-    this.setState({token: token});
+
     if (token) {
+      this.props.dispatch(login(token))
       try {
         let res = await getUser(token);
         console.log(res)
@@ -97,7 +99,7 @@ class Drawer extends React.Component {
   }
 
   getProfile = () => {
-    if (this.state.token) {
+    if (this.props.isLogin) {
       return (
         <View style={{flex: 1}}>
           {this.getSubProfile()}
@@ -164,4 +166,11 @@ Drawer.propTypes = {
   navigation: PropTypes.object
 };
 
-export default Drawer;
+function mapStateToProps(state) {
+  return {
+    isLogin: state.isLogin,
+    token: state.token,
+  }
+}
+
+export default connect(mapStateToProps)(Drawer);

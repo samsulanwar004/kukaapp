@@ -1,8 +1,8 @@
 import React from 'react';
 
-const URL = 'https://9b694cf5.ngrok.io/api';
+const URL = 'https://ba000d76.ngrok.io/api';
 
-const login = async(email, pass) => {
+const auth = async(email, pass) => {
   try {
     let response = await fetch(URL+'/login', {
       method: 'POST',
@@ -41,4 +41,4 @@ const getUser = async(token) => {
   }
 }
 
-export { getUser, login };
+export { getUser, auth };
